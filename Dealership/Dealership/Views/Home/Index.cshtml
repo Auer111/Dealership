@@ -1,0 +1,36 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="jumbotron jumbotron-fluid bg-car d-flex">
+    <div class="container my-auto">
+        <h1 class="display-4">John Doe Auto</h1>
+        <div class="lead">
+            @*<a href="@Url.Action("Index","Inventory")" class="btn btn-primary">View Inventory</a>*@
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row" style="margin-top:-3em;">
+        <div class="col-6 col-md-4 col-xl-3 mb-3">
+            @Html.PartialAsync("_CardLink", Tuple.Create($"/Inventory/{Vehicle.VehicleCondition.New}", @"New.png", "New")).Result
+        </div>
+        <div class="col-6 col-md-4 col-xl-3 mb-3">
+            @Html.PartialAsync("_CardLink", Tuple.Create($"/Inventory/{Vehicle.VehicleCondition.Used}", @"Used.png", "Used")).Result
+        </div>
+        @*<div class="col-sm-6 col-md-4 mb-3">
+            @Html.PartialAsync("_CardLink", Tuple.Create($"#", @"<i class=""fad fa-car-mechanic""></i>", "Service")).Result
+        </div>
+        <div class="col-sm-6 col-md-4 mb-3">
+            @Html.PartialAsync("_CardLink", Tuple.Create($"#", @"<i class=""fad fa-piggy-bank""></i>", "Finance")).Result
+        </div>
+        <div class="col-sm-6 col-md-4 mb-3">
+            @Html.PartialAsync("_CardLink", Tuple.Create($"#", @"<i class=""fad fa-phone""></i>", "Contact Us")).Result
+        </div>*@
+    </div>
+</div>
+
+
+
+

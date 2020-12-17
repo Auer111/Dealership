@@ -1,0 +1,68 @@
+﻿@model Inventory
+
+<div id="Inventory" class="row">
+        @foreach (Vehicle v in Model.Vehicles)
+        {
+            <div class="col-xs-12 col-sm-6 col-lg-4 col-xl-3 mb-3">
+                @Component.InvokeAsync("Vehicle", new { vehicle = v, view = "card" }).Result
+            </div>
+
+        }
+
+<div class="col-12">
+
+    <input hidden asp-for="@Model.Page" value="@( Model.Page ?? 1)" />
+    <ul class="mt-2 pagination d-flex justify-content-center">
+
+        <li class="page-item @(Model.hasPrevious ? "":"disabled")"><a class="page-link" onclick="LoadPage(-1)"><</a></li>
+
+        @if (Model.Page > 2)
+        {
+            <li class="page-item"><a class="page-link" onclick="LoadPageAbsolute(1)">1</a></li>
+        }
+        @if (Model.Page > 3)
+        {
+            <li class="page-item"><a class="page-link" onclick="LoadPageAbsolute(@((int)Math.Floor((decimal)(1 + Model.Page ?? Model.PageTotal) / 2)))">...</a></li>
+        }
+
+        @if (Model.hasPrevious)
+        {
+            <li class="page-item"><a class="page-link" onclick="LoadPage(-1)">@(Model.Page - 1)</a></li>
+        }
+
+        <li class="page-item active"><a class="page-link">@(Model.PageTotal == 1 ? "1/1" : (Model.Page ?? 1).ToString())</a></li>
+
+        @if (Model.hasNext)
+        {
+            <li class="page-item"><a class="page-link" onclick="LoadPage(1)">@(Model.Page + 1)</a></li>
+        }
+
+        @if (Model.Page < Model.PageTotal - 2)
+        {
+    <li class="page-item"><a class="page-link" onclick="LoadPageAbsolute(@((int)Math.Ceiling((decimal)(Model.PageTotal + Model.Page ?? 1) / 2)))">...</a></li>
+        }
+
+        @if (Model.Page < Model.PageTotal - 1)
+        {
+            <li class="page-item"><a class="page-link" onclick="LoadPageAbsolute(@Model.PageTotal)">@Model.PageTotal</a></li>
+        }
+
+        <li class="page-item @(Model.hasNext ? "":"disabled")"><a class="page-link" onclick="LoadPage(1)">></a></li>
+
+    </ul>
+    <script>
+        function LoadPage(offset){
+            $('#Page').val(parseInt($('#Page').val()) + offset);
+            SearchAjax();
+        }
+        function LoadPageAbsolute(num){
+            $('#Page').val(num);
+            SearchAjax();
+        }
+    </script>
+</div>
+
+</div>
+
+
+

@@ -1,0 +1,11 @@
+﻿@model string
+@{
+    ViewData["Title"] = "Vehicle";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@Component.InvokeAsync("VehicleSession", new { VIN = Model }).Result
+
+
+        

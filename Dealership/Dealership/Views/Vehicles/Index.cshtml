@@ -1,0 +1,71 @@
+﻿@model IEnumerable<Dealership.Models.Vehicle>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+    <div class="container">
+
+        <h1>Inventory</h1>
+
+        <p>
+            <a class="btn btn-primary" asp-action="Vehicle">Create New</a>
+        </p>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Condition)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.VIN)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Make)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Model)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Year)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Price)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Condition)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.VIN)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Make)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Model)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Year)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Price)
+                        </td>
+                        <td>
+                            <a href="@Url.Action("Vehicle", new { VIN = @item.VIN })">Edit</a> |
+                            <a asp-action="Preview" asp-route-id="@item.ID">Preview</a> |
+                            <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+

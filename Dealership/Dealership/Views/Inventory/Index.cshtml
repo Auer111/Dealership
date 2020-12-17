@@ -1,0 +1,23 @@
+﻿@model SearchCriteria
+@{
+    ViewData["Title"] = "View";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <div class="container">
+        <form>
+
+            @Component.InvokeAsync("Search", Model).Result
+
+            @Component.InvokeAsync("Inventory", Model).Result
+
+        </form>
+        
+    </div>
+
+
+
+
+
+
+

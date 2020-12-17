@@ -1,0 +1,175 @@
+﻿
+body{
+    overflow-x:hidden;
+}
+.center {
+    display: grid;
+    place-content: center;
+}
+
+a.clear {
+    color: black;
+    text-decoration: none;
+}
+
+
+#Criteria {
+    min-height: 72px;
+}
+    #Criteria.start-hide {
+        min-height: 0;
+        padding: 0;
+    }
+
+#Filters {
+    margin-top: -0.5em !important;
+    flex-direction: row-reverse;
+}
+.badge-pill {
+    font-size: large;
+    font-weight: normal;
+    letter-spacing: 0.5px;
+    box-shadow: 0px 0.2rem 0.2rem 0px rgb(76, 99, 123);
+}
+
+.bg-car {
+    background: linear-gradient(0deg, rgb(255, 255, 255), rgb(248 249 250 / 0.5)), url(/img/car.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position-y: center;
+    height: max(30vw,40vh);
+    background-position: center;
+    position: relative;
+}
+
+.card-img-top.limit {
+    height: 10em;
+    object-fit: cover;
+}
+
+.card.d-shadow {
+    box-shadow: rgba(25, 41, 61, 0.18) 0px 2px 3px 1px;
+    height: 100%;
+}
+    .card.d-shadow:hover {
+        transition: all 0.2s ease 0s;
+        box-shadow: rgba(24, 41, 61, 0.1) 0px 14px 21px;
+    }
+
+.panel .info {
+    padding-right: 2px;
+    padding-left: 2px;
+}
+
+    .panel .info > div {
+        padding: 1em;
+        margin-bottom: 5px;
+        background-color: #f4f8fa;
+        display: flex;
+    }
+.panel .info > div > * {
+    flex:1;
+}
+.carousel img {
+    max-height: 80vh;
+    min-width: auto;
+    object-fit: cover;
+}
+.icon-shadow {
+    filter: drop-shadow(0px 0px 2px black);
+}
+
+.badge-pill {
+    border-radius: 3px;
+}
+
+
+.close {
+    float: none;
+    vertical-align: text-bottom;
+    font-size: 1.5rem;
+    margin-left: 0.2em;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    opacity: 0.7;
+}
+    .close:hover {
+        color: #fff;
+        text-decoration: none;
+    }
+
+
+.gridWrapper {
+    margin-top: -1em;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(8em, 1fr));
+}
+.gridItem {
+    background-color: transparent;
+    border: none;
+    margin-top: 1em;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow-x: hidden;
+}
+    .gridItem:hover {
+        border-bottom: 2px solid black;
+    }
+
+.modelWrapper {
+    display: none;
+}
+
+
+
+
+.color-icon {
+    height: 3em;
+    width: 3em;
+    border-radius: 100%;
+    border: 3px solid #676767;
+    border-style: outset;
+}
+.btn-clear {
+    border: none;
+    background: none;
+}
+
+.btn-body {
+    border-radius: 1em;
+}
+
+    .btn-body:hover {
+        background-color: #f7f7f7;
+        border-bottom: none;
+    }
+@media only screen and (max-width: 600px) {
+    .nav-link {
+        padding: .5rem 0.7rem;
+    }
+}
+
+
+
+@media only screen and (max-width: 991px) {
+    .mobile-pr-0 {
+        padding-right: 0;
+    }
+    .mobile-ib {
+        display: inline-block;
+    }
+}
+
+
+/*Paginaton*/
+.page-item {
+    cursor: pointer;
+}
+    .page-item.disabled {
+        cursor: not-allowed;
+    }
+    .page-item.active {
+        cursor: context-menu;
+    }
+

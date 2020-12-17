@@ -1,0 +1,97 @@
+﻿@model Dealership.Models.Vehicle
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+    <div class="container">
+
+        <h1>Details</h1>
+        <div class="row">
+
+            <div class="col-12 col-lg-8">
+
+                <div>
+                    <h4>Vehicle</h4>
+                    <hr />
+                    <dl class="row">
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(model => model.Condition)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.Condition)
+                        </dd>
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(model => model.VIN)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.VIN)
+                        </dd>
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(model => model.Make)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.Make)
+                        </dd>
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(model => model.Model)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.Model)
+                        </dd>
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(model => model.Year)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.Year)
+                        </dd>
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(model => model.Mileage)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.Mileage)
+                        </dd>
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(model => model.Color)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.Color)
+                        </dd>
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(model => model.Trim)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.Trim)
+                        </dd>
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(model => model.Price)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.Price)
+                        </dd>
+                    </dl>
+                </div>
+                <div>
+
+                    <a href="@Url.Action("Vehicle", new { VIN = Model.VIN })">Edit</a> |
+                    <a asp-action="Index">Back to List</a>
+                </div>
+
+            </div>
+            <style>
+                .card-col{
+                    margin-top: 3em;
+                    height: fit-content;
+                }
+            </style>
+            <div class="col-12 col-lg-4 card-col">
+                @Component.InvokeAsync("Vehicle", Model).Result
+            </div>
+
+        </div>
+
+        
+        
+
+
+    </div>

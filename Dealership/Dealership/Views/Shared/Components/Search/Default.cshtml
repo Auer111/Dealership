@@ -1,0 +1,204 @@
+﻿@model SearchCriteria
+
+<style>
+    .fade:not(.show) {
+        display: none;
+    }
+</style>
+<div class="card text-center mb-3 mt-5">
+    <div class="card-header">
+
+        <div class="row">
+            <div class="col-12 col-lg" style="padding-left: 0.4em;padding-right: 0.4em;">
+                <div class="input-group mb-3">
+                    <autocomplete id="Search" json="@(Html.Raw(Json.Serialize(Model.Makes.Select(x=> x.Make))))" />
+                    <input id="Search" class="form-control" type="search" placeholder="Search makes, models, or keywords" aria-label="Search">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-primary m-0" type="button" onclick="SearchButton()">Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <ul class="nav nav-tabs card-header-tabs" id="nav-tab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link" id="nav-make-tab" data-toggle="tab" href="#nav-make" role="tab" aria-controls="nav-make" aria-selected="false">Make/Model</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="nav-body-tab" data-toggle="tab" href="#nav-body" role="tab" aria-controls="nav-body" aria-selected="false">Body</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="nav-price-tab" data-toggle="tab" href="#nav-price" role="tab" aria-controls="nav-price" aria-selected="false">Price</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="nav-color-tab" data-toggle="tab" href="#nav-color" role="tab" aria-controls="nav-color" aria-selected="false">Color</a>
+            </li>
+        </ul>
+    </div>
+    <div id="Criteria" class="card-body start-hide">
+        <div class="tab-content" id="nav-tabContent">
+            
+            <input hidden asp-for="Condition" />
+
+            <div class="tab-pane fade" id="nav-make" role="tabpanel" aria-labelledby="nav-make-tab">
+                <input hidden asp-for="Make" />
+                <input hidden asp-for="Model" />
+                <div class="makeWrapper gridWrapper">
+                    @if (Model.Makes != null)
+                    {@foreach (MakeModel mm in Model.Makes)
+                        {
+                            <button type="button" class="btn btn-body gridItem" onclick="SetMake('@mm.Make');">@mm.Make</button>
+                        }}
+                </div>
+
+                @if (Model.Makes != null)
+                {@foreach (MakeModel mm in Model.Makes)
+                    {
+                        <div id="make_@mm.Make" class="modelWrapper gridWrapper">
+
+                            @if (mm.Models != null)
+                            {@foreach (Model mod in mm.Models)
+                                {
+                                    <button type="button" class="btn btn-body gridItem" onclick="SetModel('@mod.Name');">@mod.Name</button>
+                                }}
+                        </div>
+                    }}
+            </div>
+            <div class="tab-pane fade" id="nav-body" role="tabpanel" aria-labelledby="nav-make-tab">
+
+                <div class="gridWrapper">
+                    @if (Model.BodyTypes != null)
+                    {@foreach (BodyType bt in Model.BodyTypes)
+                        {
+                            <button class="btn-clear btn btn-body gridItem" type="button" onclick="SetBodyType('@bt.Name');">
+                                <img src="@bt.Image" style="height: 80px;width: 80px;object-fit: contain;" />
+                                <div>@bt.Name</div>
+                            </button>
+
+                        }}
+                </div>
+                <input hidden asp-for="BodyType" />
+            </div>
+            <div class="tab-pane fade" id="nav-price" role="tabpanel" aria-labelledby="nav-price-tab">
+                <input hidden type="number" asp-for="PriceMin" />
+                <input hidden type="number" asp-for="PriceMax" />
+                <div class="row mt-3">
+                    <div class="col-12">
+                    <slider step="2000" min="0" max="100000" min-start="(int)@Model.PriceMin" max-start="(int)@Model.PriceMax" on-change="SliderChange()"  />
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="nav-color" role="tabpanel" aria-labelledby="nav-color-tab">
+                <input hidden asp-for="Color" />
+                <div class="gridWrapper">
+                    @if (Model.Colors != null)
+                    {
+                        @foreach (BodyColor c in Model.Colors)
+                        {
+                            <button type="button" class="btn-clear btn btn-body gridItem center" onclick="SetColor('@c.Name');">
+                                <div class="color-icon" style="background-color:@c.Name;"></div>
+                                <div>@c.Name</div>
+                            </button>
+
+                        }}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div id="Filters" class="my-2">
+    <!--Filters Go Here-->
+    @if (Model.Condition != Vehicle.VehicleCondition.Undefined)
+    {
+        <button class="filter_Condition btn btn-primary badge badge-pill badge-primary m-2" onclick="RemoveCondition();"><span>@Model.Condition</span><span class="close">&times;</span></button>
+    }
+
+</div>
+
+<script on-complete="true">
+
+    $(".nav-link").one("click", function () { $("#Criteria").removeClass("start-hide");});
+
+    window.Defaults = {};
+    function SaveDefaults() {
+        $("form").serializeArray().forEach( i=> Defaults[i.name] = i.value);
+    }
+    SaveDefaults();
+</script>
+
+<script>
+
+    function SearchButton() {
+        SetMake($("#Search").val());
+        $("#Search").val("");
+    }
+
+    function RemoveCondition() {
+        $("#Condition").val("Undefined");
+        $("#Filters .filter_Condition").remove();
+        SearchAjax();
+    }
+
+    function RemoveColor() { SetColor(Defaults["Color"]); }
+    function SetColor(color) {
+        $("#Color").val(color);
+        SearchAjax();
+        AddBadge(color, 'RemoveColor');
+    }
+    
+    function RemoveBodyType() { SetBodyType(Defaults["BodyType"]);}
+    function SetBodyType(bodyType) {
+        $("#BodyType").val(bodyType);
+        SearchAjax();
+        AddBadge(bodyType, 'RemoveBodyType');
+    }
+
+    function SliderChange() {
+        let range = slider.noUiSlider.get();
+        SetPrice(range[0], range[1])
+    }
+    function RemovePrice() { SetPrice(Defaults["PriceMin"], Defaults["PriceMax"]);}
+    function SetPrice(sMIN, sMAX) {
+        $("#PriceMin").val(sMIN);
+        $("#PriceMax").val(sMAX);
+        slider.noUiSlider.set([parseInt(sMIN), parseInt(sMAX)]);
+        SearchAjax();
+        AddBadge(kFormatter(sMIN)+"-"+kFormatter(sMAX), 'RemovePrice');
+    }
+
+    function RemoveMM() {SetMake(Defaults["Make"]);}
+    function SetMake(make) {
+        if (isEmptyOrSpaces(make)) 
+        {  $(".modelWrapper").css("display", "none"); $(".makeWrapper").css("display", "grid"); }
+        else
+        { $(".makeWrapper, .modelWrapper").css("display", "none"); $("#make_" + make).css("display", "grid"); }
+        $("#Make").val(make);
+        $("#Model").val("");
+        SearchAjax();
+        AddBadge(make, 'RemoveMM');
+    }
+    function SetModel(model){
+        $(".modelWrapper").css("display", "none");
+        $(".makeWrapper").css("display", "grid");
+        $("#Model").val(model);
+        SearchAjax();
+        AddBadge($("#Make").val() + " " + model, 'RemoveMM');
+    }
+
+    function AddBadge(text, callback) {
+        if (isEmptyOrSpaces(text)) { return; }
+        $("#Filters .filter_" + callback).remove();
+        $('#Filters').append(`<button class="filter_${callback} btn btn-primary badge badge-pill badge-primary m-2" onclick="CallFunc(${callback});"><span>${text}</span><span class="close">&times;</span></button>`);
+    }
+    function CallFunc(removeFunc) { removeFunc(); $(".filter_" + removeFunc.name).remove(); }
+
+    function SearchAjax() {
+         $.post('@Url.Action("SearchAjax","Inventory")', $('form').serialize(),
+            function (data) { $("#Inventory").replaceWith(data);});
+    }
+
+    function kFormatter(num) {return Math.abs(num) > 999 ? Math.sign(num)*((Math.abs(num)/1000).toFixed(1)) + 'k' : Math.sign(num)*Math.abs(num)}
+
+    function isEmptyOrSpaces(str){ return str === null || str.match(/^ *$/) !== null; }
+
+</script>
