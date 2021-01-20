@@ -14,20 +14,17 @@
 <div class="container">
     <div class="row" style="margin-top:-3em;">
         <div class="col-6 col-md-4 col-xl-3 mb-3">
-            @Html.PartialAsync("_CardLink", Tuple.Create($"/Inventory/{Vehicle.VehicleCondition.New}", @"New.png", "New")).Result
+            @Html.PartialAsync("_CardLink", Tuple.Create($"/Inventory/{Vehicle.VehicleCondition.New}", @"New.svg", "New")).Result
         </div>
         <div class="col-6 col-md-4 col-xl-3 mb-3">
-            @Html.PartialAsync("_CardLink", Tuple.Create($"/Inventory/{Vehicle.VehicleCondition.Used}", @"Used.png", "Used")).Result
+            @Html.PartialAsync("_CardLink", Tuple.Create($"/Inventory/{Vehicle.VehicleCondition.Used}", @"Used.svg", "Used")).Result
         </div>
-        @*<div class="col-sm-6 col-md-4 mb-3">
-            @Html.PartialAsync("_CardLink", Tuple.Create($"#", @"<i class=""fad fa-car-mechanic""></i>", "Service")).Result
+        <div class="col-6 col-md-4 col-xl-3 mb-3">
+            @Html.PartialAsync("_CardLink", Tuple.Create($"/Contact", @"Plane.svg", "Contact")).Result
         </div>
-        <div class="col-sm-6 col-md-4 mb-3">
-            @Html.PartialAsync("_CardLink", Tuple.Create($"#", @"<i class=""fad fa-piggy-bank""></i>", "Finance")).Result
+        <div class="col-6 col-md-4 col-xl-3 mb-3">
+            @Html.PartialAsync("_CardLink", Tuple.Create($"/About", @"About.svg", "About")).Result
         </div>
-        <div class="col-sm-6 col-md-4 mb-3">
-            @Html.PartialAsync("_CardLink", Tuple.Create($"#", @"<i class=""fad fa-phone""></i>", "Contact Us")).Result
-        </div>*@
     </div>
 </div>
 

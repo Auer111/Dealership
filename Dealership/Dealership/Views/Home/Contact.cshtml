@@ -1,0 +1,56 @@
+﻿@model ContactViewModel
+
+<form method="post">
+
+    <div class="container my-5 d-flex justify-content-center">
+        <div style="max-width:22em">
+
+            
+
+            @{
+                if (!Model.Sent)
+                {
+                    <div class="card bg-light my-3">
+                        <div class="card-body">
+
+                            <div class="row">
+                                <div class="col-12 my-4 center">
+                                    <h1 style="color:#557eaa">Contact Us</h1>
+                                </div>
+                                
+                                <div class="form-group col-12">
+                                    <label asp-for="Name"></label>
+                                    <input class="form-control" asp-for="Name">
+                                </div>
+                                <div class="form-group col-12">
+                                    <label asp-for="Email" placeholder="myemail@mail.com"></label>
+                                    <input class="form-control" asp-for="Email">
+                                </div>
+                                <div class="form-group col-12">
+                                    <label asp-for="Body"></label>
+                                    <textarea asp-for="Body" class="form-control" rows="3"></textarea>
+                                </div>
+                                <div class="w-100 text-right mx-3 mt-1">
+                                    <button class="btn btn-primary w-100" type="submit">Send</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="card text-white bg-success mb-3">
+                        <div class="card-body text-center">
+                            <img src="~/img/Party.svg" alt="...">
+                            <h5 class="card-title">Ta-da!</h5>
+                            <p class="card-text">Your message has been sent!</p>
+                        </div>
+                    </div>
+                }
+            }
+
+        </div>
+    </div>
+    
+</form>

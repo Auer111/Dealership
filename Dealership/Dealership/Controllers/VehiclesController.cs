@@ -51,7 +51,7 @@ namespace Dealership.Controllers
         {
             try
             {
-                Vehicle v = await _context.Vehicles.Where(v=> v.ID == vehicle.ID).FirstOrDefaultAsync();
+                Vehicle v = await _context.Vehicles.Where(v => v.ID == vehicle.ID).FirstOrDefaultAsync();
                 if (v == null) { throw new Exception("Not found"); }
 
                 VehicleFullDB vf = await _context.VehiclesFull.Where(vf => vf.VIN == v.VIN).FirstOrDefaultAsync();
@@ -63,7 +63,7 @@ namespace Dealership.Controllers
             }
             catch (Exception) { return NotFound(); }
 
-            return View(nameof(Index),await _context.Vehicles.ToListAsync());
+            return View(nameof(Index), await _context.Vehicles.ToListAsync());
         }
 
 
@@ -86,7 +86,7 @@ namespace Dealership.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task< IActionResult> NHTSAVinDecode(Vehicle vehicle)
+        public async Task<IActionResult> NHTSAVinDecode(Vehicle vehicle)
         {
             ModelState.Clear();
             try
@@ -108,7 +108,8 @@ namespace Dealership.Controllers
             session.Session = VehicleSession.SessionType.Create;
             try
             {
-                if (VIN != null) {
+                if (VIN != null)
+                {
                     var query = from vehicle in _context.Set<Vehicle>()
                                 join full in _context.Set<VehicleFullDB>()
                                 on vehicle.VIN equals full.VIN
@@ -229,7 +230,7 @@ namespace Dealership.Controllers
                 }
                 return View("VehicleFull", session);
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             { return RedirectToAction(nameof(Index)); }
         }
 
@@ -266,6 +267,7 @@ namespace Dealership.Controllers
             catch (Exception) { return StatusCode(500, "Error Saving Image"); }
             return Ok(webPath);
         }
+
         [HttpPost]
         public async Task<ActionResult> UploadFiles(List<IFormFile> files, string VIN)
         {
@@ -274,7 +276,8 @@ namespace Dealership.Controllers
 
 
             List<string> webPaths = new List<string>();
-            foreach (IFormFile file in files) {
+            foreach (IFormFile file in files)
+            {
                 string webPath = "";
                 try
                 {
@@ -325,5 +328,8 @@ namespace Dealership.Controllers
             return session;
         }
         #endregion
+
+        
+        
     }
 }

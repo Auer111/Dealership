@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Dealership.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace Dealership.Controllers
 {
@@ -23,15 +24,29 @@ namespace Dealership.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        [HttpGet("Contact")]
+        public IActionResult GetContact()
         {
-            return View();
+            return View("Contact", new ContactViewModel());
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        [HttpPost("Contact")]
+        public IActionResult PostContact(ContactViewModel model)
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            model.Sent = true;
+            return View("Contact", model);
+        }
+
+        [HttpGet("About")]
+        public IActionResult GetAbout()
+        {
+            return View("About");
+        }
+
+        [HttpPost("UploadCSV")]
+        public IActionResult UploadCSV(IFormFile file)
+        {
+            return new ContentResult { Content = "Found Endpoint", StatusCode = 200 };
         }
     }
 }
