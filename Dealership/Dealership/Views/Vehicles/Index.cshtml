@@ -18,7 +18,7 @@
                         @Html.DisplayNameFor(model => model.Condition)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.VIN)
+                        @Html.DisplayNameFor(model => model.Vin)
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.Make)
@@ -43,7 +43,7 @@
                             @Html.DisplayFor(modelItem => item.Condition)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.VIN)
+                            @Html.DisplayFor(modelItem => item.Vin)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Make)
@@ -58,9 +58,9 @@
                             @Html.DisplayFor(modelItem => item.Price)
                         </td>
                         <td>
-                            <a href="@Url.Action("Vehicle", new { VIN = @item.VIN })">Edit</a> |
-                            <a asp-action="Preview" asp-route-id="@item.ID">Preview</a> |
-                            <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                            <a href="@Url.Action("Vehicle", new { VIN = @item.Vin })">Edit</a> |
+                            <a asp-action="Preview" asp-route-id="@item.Id">Preview</a> |
+                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                         </td>
                     </tr>
                 }

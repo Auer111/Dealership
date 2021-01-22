@@ -1,12 +1,12 @@
 ﻿
-@model VehicleSession
+@model Vehicle
 @using Auer.Models;
     <div class="panel mb-3">
 
         <div >
 
             <div class="container">
-                <h5 class="card-title mt-4">@Model.Vehicle.Year @Model.Vehicle.Make @Model.Vehicle.Model <small>@Model.Vehicle.Trim</small></h5>
+                <h5 class="card-title mt-4">@Model.Year @Model.Make @Model.Model <small>@Model.trim</small></h5>
             </div>
 
             <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
@@ -17,11 +17,11 @@
                 </ol>
                 <div class="carousel-inner">
                     <div class="carousel-item active">
-                        <img src="@Model.Vehicle.Image" class="d-block w-100">
+                        <img src="@Model.Image" class="d-block w-100">
                     </div>
-                    @if (Model.VehicleFull.Images != null && Model.VehicleFull.Images.Any())
+                    @if (Model.Images != null && Model.Images.Any())
                     {
-                        @foreach (string file in Model.VehicleFull.Images)
+                        @foreach (string file in Model.Images)
                         {
                             <div class="carousel-item">
                                 <img src="@file" class="d-block w-100">
@@ -48,10 +48,10 @@
                     @{
                         string col1 = "";
                         string col2 = "";
-                        if (Model.VehicleFull.Details != null)
+                        if (Model.Details != null)
                         {
                             int i = 0;
-                            foreach (KVP kvp in Model.VehicleFull.Details)
+                            foreach (KVP kvp in Model.Details)
                             {
                                 string item = $"<div><b>{kvp.Name}</b><span>{kvp.Value}<span></div>";
                                 if (i % 2 == 0) { col1 += item; }

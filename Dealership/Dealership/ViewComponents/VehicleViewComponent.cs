@@ -21,7 +21,7 @@ namespace Dealership.ViewComponents
         public async Task<IViewComponentResult> InvokeAsync(Vehicle vehicle)
         {
             await Task.Run(() => Console.WriteLine("Async"));
-            if (vehicle.VIN == null) { vehicle.VIN = ""; }
+            if (vehicle.Vin == null) { vehicle.Vin = ""; }
             return View("Card", vehicle);
         }
 

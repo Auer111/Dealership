@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -7,12 +8,14 @@ using System.Threading.Tasks;
 
 namespace Dealership.Models
 {
-    public class BodyColor
+
+    public class Make
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Int64 ID { get; set; }
-        public string Name { get; set; }
+        public Int64 Id { get; set; }
 
+        public string Name { get; set; }
+        public List<Model> Models { get; set; }
     }
 }

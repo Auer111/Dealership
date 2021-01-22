@@ -5,32 +5,58 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Http;
+using Auer.Models;
+using Newtonsoft.Json;
 
 namespace Dealership.Models
 {
 
     public class Vehicle
     {
+
         public enum VehicleCondition { Undefined, New, Used, CPO }
+        public VehicleCondition Condition { get; set; }
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Int64 ID { get; set; }
-        public VehicleCondition Condition {get; set;}
+        public long Id { get; set; }
 
-        [Required(ErrorMessage = "Required")]
-        public string VIN { get; set; }
+        [ForeignKey("Dealer")]
+        public long DealerId { get; set; }
+        public Dealer Dealer { get; set; }
 
-        [Required(ErrorMessage = "Required")]
+        public string Vin { get; set; }
+
+
+        [NotMapped]
         public string Make { get; set; }
-
-        [Required(ErrorMessage = "Required")]
+        [NotMapped]
         public string Model { get; set; }
+        [NotMapped]
+        public string trim { get; set; }
+        [ForeignKey("Trim")]
+        public long TrimId { get; set; }
+        public Trim Trim { get; set; }
+
+
+        [NotMapped]
+        public BodyColor _BodyColor { get; set; }
+        public string Color { get; set; }
+        public long ColorId { get; set; }
+
         public int Year { get; set; }
         public int Mileage { get; set; }
-        public string Color { get; set; }
-        public string Trim{ get; set; }
         public string Image { get; set; } = "/cars/default.jpg";
+        
+        [NotMapped]
+        public List<string> Images { get; set; }
+        public string DetailsJSON { get; set; }
+
+        [NotMapped]
+        public List<KVP> Details { 
+            get{ return JsonConvert.DeserializeObject<List<KVP>>(DetailsJSON) ?? new List<KVP>(); } 
+            set{ DetailsJSON = JsonConvert.SerializeObject(DetailsJSON); }
+        }
 
         //[NotMapped]
         //public IFormFile ImgUpload { get; set; }
@@ -38,17 +64,15 @@ namespace Dealership.Models
         [Column(TypeName = "decimal(10,2)")]
         public decimal Price { get; set; }
 
-
-
-        public void GetUpdates(Vehicle vehicle) 
+        public void GetUpdates(Vehicle vehicle)
         {
-            VIN = vehicle.VIN;
+            Vin = vehicle.Vin;
             Make = vehicle.Make;
             Model = vehicle.Model;
             Year = vehicle.Year;
             Mileage = vehicle.Mileage;
             Color = vehicle.Color;
-            Trim = vehicle.Trim;
+            trim = vehicle.trim;
             Image = vehicle.Image;
             Price = vehicle.Price;
         }

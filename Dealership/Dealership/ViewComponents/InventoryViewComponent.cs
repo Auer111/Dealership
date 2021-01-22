@@ -23,9 +23,9 @@ namespace Dealership.ViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync(SearchCriteria Search)
         {
-            if (Search == null) { return View(new Inventory { Vehicles = await GetItemsAsync() }); ; }
+            if (Search == null) { return View(new InventoryViewModel { Vehicles = await GetItemsAsync() }); ; }
 
-            Inventory Inv = await GetItemsFilteredAsync(Search);
+            InventoryViewModel Inv = await GetItemsFilteredAsync(Search);
 
             return View(Inv);
         }
@@ -33,7 +33,7 @@ namespace Dealership.ViewComponents
         {
             return await db.Vehicles.Take(pageSize).ToListAsync();
         }
-        private async Task<Inventory> GetItemsFilteredAsync(SearchCriteria Search)
+        private async Task<InventoryViewModel> GetItemsFilteredAsync(SearchCriteria Search)
         {
             IQueryable<Vehicle> Vehicles = db.Vehicles;
 
@@ -60,7 +60,7 @@ namespace Dealership.ViewComponents
 
             List<Vehicle> _v = await Vehicles.Skip((TargetPage -1) * pageSize).Take(pageSize).ToListAsync();
 
-            return new Inventory()
+            return new InventoryViewModel()
             {
                 Vehicles = _v,
                 Page = TargetPage,

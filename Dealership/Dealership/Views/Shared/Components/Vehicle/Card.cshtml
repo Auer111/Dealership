@@ -1,13 +1,13 @@
 ﻿@model Vehicle
 
-<a class="card d-shadow" href="@Url.Action("Vehicle","Inventory",new { VIN = Model.VIN })">
+<a class="card d-shadow" href="@Url.Action("Vehicle","Inventory",new { VIN = Model.Vin })">
     <img src="@Model.Image" class="card-img-top limit">
     <div class="card-body">
         <div class="d-flex justify-content-between">
             <div class="card-text">
                 <b class="text-dark">@Model.Year.ToString() @Model.Make</b><br />
                 <b class="text-dark">@Model.Model</b><br />
-                <span class="text-muted">@Model.Trim</span>
+                <span class="text-muted">@Model.trim</span>
             </div>
             <div class="card-text">
                 <h4>@Model.Price.ToString("C0")</h4>

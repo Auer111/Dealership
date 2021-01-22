@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Dealership.Models
 {
-    public class Inventory
+    public class InventoryViewModel
     {
         public List<Vehicle> Vehicles { get; set; }
 

@@ -8,7 +8,7 @@ namespace Dealership.Models
     public class SearchCriteria
     {
         //Loaded in SearchViewComponent
-        public List<MakeModel> Makes { get; set; }
+        public List<Make> Makes { get; set; }
         public List<BodyColor> Colors { get; set; }
         public List<BodyType> BodyTypes { get; set; }
 

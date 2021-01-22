@@ -26,10 +26,10 @@ namespace Dealership.ViewComponents
             if (searchCriteria.BodyTypes == null) { searchCriteria.BodyTypes = BodyTypes.All; }
             if (searchCriteria.Colors == null) { searchCriteria.Colors = await _context.Colors.ToListAsync(); }
             if (searchCriteria.Makes == null) {
-                searchCriteria.Makes = await _context.Makes.Select(make => new MakeModel
+                searchCriteria.Makes = await _context.Makes.Select(make => new Make
                 {
-                    Make = make.Name,
-                    Models = _context.Models.Where(mo => mo.MakeID == make.ID).ToList()
+                    Name = make.Name,
+                    Models = _context.Models.Where(mo => mo.MakeId == make.Id).ToList()
                 }).ToListAsync();
             }
             return View(searchCriteria);

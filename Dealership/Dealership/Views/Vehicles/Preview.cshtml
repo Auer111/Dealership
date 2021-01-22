@@ -22,10 +22,10 @@
                             @Html.DisplayFor(model => model.Condition)
                         </dd>
                         <dt class="col-sm-2">
-                            @Html.DisplayNameFor(model => model.VIN)
+                            @Html.DisplayNameFor(model => model.Vin)
                         </dt>
                         <dd class="col-sm-10">
-                            @Html.DisplayFor(model => model.VIN)
+                            @Html.DisplayFor(model => model.Vin)
                         </dd>
                         <dt class="col-sm-2">
                             @Html.DisplayNameFor(model => model.Make)
@@ -58,10 +58,10 @@
                             @Html.DisplayFor(model => model.Color)
                         </dd>
                         <dt class="col-sm-2">
-                            @Html.DisplayNameFor(model => model.Trim)
+                            @Html.DisplayNameFor(model => model.trim)
                         </dt>
                         <dd class="col-sm-10">
-                            @Html.DisplayFor(model => model.Trim)
+                            @Html.DisplayFor(model => model.trim)
                         </dd>
                         <dt class="col-sm-2">
                             @Html.DisplayNameFor(model => model.Price)
@@ -73,7 +73,7 @@
                 </div>
                 <div>
 
-                    <a href="@Url.Action("Vehicle", new { VIN = Model.VIN })">Edit</a> |
+                    <a href="@Url.Action("Vehicle", new { VIN = Model.Vin })">Edit</a> |
                     <a asp-action="Index">Back to List</a>
                 </div>
 

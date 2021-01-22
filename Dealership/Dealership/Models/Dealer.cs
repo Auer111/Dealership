@@ -7,14 +7,13 @@ using System.Threading.Tasks;
 
 namespace Dealership.Models
 {
-    public class Model
+    public class Dealer
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Int64 ID { get; set; }
-        public long MakeID { get; set; }
+        public long Id { get; set; }
         public string Name { get; set; }
 
-
+        public List<Vehicle> Vehicles { get; set; }
     }
 }

@@ -11,7 +11,7 @@
         <div class="row">
             <div class="col-12 col-lg" style="padding-left: 0.4em;padding-right: 0.4em;">
                 <div class="input-group mb-3">
-                    <autocomplete id="Search" json="@(Html.Raw(Json.Serialize(Model.Makes.Select(x=> x.Make))))" />
+                    <autocomplete id="Search" json="@(Html.Raw(Json.Serialize(Model.Makes.Select(x=> x.Models))))" />
                     <input id="Search" class="form-control" type="search" placeholder="Search makes, models, or keywords" aria-label="Search">
                     <div class="input-group-append">
                         <button class="btn btn-outline-primary m-0" type="button" onclick="SearchButton()">Search</button>
@@ -44,19 +44,19 @@
                 <input hidden asp-for="Model" />
                 <div class="makeWrapper gridWrapper">
                     @if (Model.Makes != null)
-                    {@foreach (MakeModel mm in Model.Makes)
+                    {@foreach (Make m in Model.Makes)
                         {
-                            <button type="button" class="btn btn-body gridItem" onclick="SetMake('@mm.Make');">@mm.Make</button>
+                            <button type="button" class="btn btn-body gridItem" onclick="SetMake('@m.Name');">@m.Name</button>
                         }}
                 </div>
 
                 @if (Model.Makes != null)
-                {@foreach (MakeModel mm in Model.Makes)
+                {@foreach (Make m in Model.Makes)
                     {
-                        <div id="make_@mm.Make" class="modelWrapper gridWrapper">
+                        <div id="make_@m.Name" class="modelWrapper gridWrapper">
 
-                            @if (mm.Models != null)
-                            {@foreach (Model mod in mm.Models)
+                            @if (m.Models != null)
+                            {@foreach (Model mod in m.Models)
                                 {
                                     <button type="button" class="btn btn-body gridItem" onclick="SetModel('@mod.Name');">@mod.Name</button>
                                 }}
