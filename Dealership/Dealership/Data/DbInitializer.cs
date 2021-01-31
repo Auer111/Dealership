@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
+using Auer.Security;
 
 namespace Dealership.Data
 {
@@ -18,50 +19,7 @@ namespace Dealership.Data
 
             context.Database.EnsureCreated();
 
-            if (!context.Users.Any())
-            {
-
-                string[] roles = new string[] { "Administrator" };
-
-                foreach (string role in roles)
-                {
-                    var roleStore = new RoleStore<IdentityRole>(context);
-
-                    if (!context.Roles.Any(r => r.Name == role))
-                    {
-                        await roleStore.CreateAsync(new IdentityRole(role));
-                    }
-                }
-
-                var user = new IdentityUser
-                {
-                    UserName = "admin",
-                    NormalizedUserName = "ADMIN",
-                    Email = "jjauer95@gmail.com",
-                    NormalizedEmail = "JJAUER95@EXAMPLE.COM",
-                    PhoneNumber = "9899759606",
-                    EmailConfirmed = true,
-                    PhoneNumberConfirmed = true,
-                    SecurityStamp = Guid.NewGuid().ToString("D")
-                };
-
-
-                if (!context.Users.Any(u => u.UserName == user.UserName))
-                {
-                    var password = new PasswordHasher<IdentityUser>();
-                    var hashed = password.HashPassword(user, "1q2w3e");
-                    user.PasswordHash = hashed;
-
-                    var userStore = new UserStore<IdentityUser>(context);
-                    var result = userStore.CreateAsync(user);
-
-                }
-
-                UserManager<IdentityUser> _userManager = serviceProvider.GetService<UserManager<IdentityUser>>();
-                IdentityUser _user = _userManager.FindByEmailAsync(user.Email).Result;
-                _ = _userManager.AddToRolesAsync(_user, roles);
-
-            }
+            
             if (!context.Vehicles.Any())
             {
 
@@ -724,7 +682,7 @@ namespace Dealership.Data
                         Condition = Vehicle.VehicleCondition.Used,
                         Color="white",
                         Make="audi",
-                        Model="q5",
+                        Model="q7",
                         trim="premium",
                         Vin="1GTEK19RXVE536195",
                         Image = "/cars/1GTEK19RXVE536195/default.jpg",
@@ -775,33 +733,135 @@ namespace Dealership.Data
                         Mileage=22522
                     }
                 };
-                foreach (Vehicle v in vehicles)
+
+                try
                 {
-                    context.Vehicles.Add(v);
+                    vehicles.Select(v => v.Make.ToUpper())
+                        .Distinct()
+                        .ToList()
+                        .ForEach(m => context.Makes.Add(new Make
+                        {
+                            Name = m.ToUpper()
+                        }));
+                    context.SaveChanges();
 
-                    if (!context.Makes.Any(m => m.Name == v.Make))
+
+
+                    vehicles.GroupBy(v => new { Model = v.Model.ToUpper(), Make = v.Make.ToUpper() })
+                        .Distinct()
+                        .ToList()
+                        .ForEach(ma => context.Models.Add(new Model
+                        {
+                            MakeId = context.Makes.FirstOrDefault(makes => makes.Name == ma.Key.Make).Id,
+                            Name = ma.Key.Model
+                        }));
+                    context.SaveChanges();
+
+
+
+                    
+                    vehicles.GroupBy(v => new { Model = v.Model.ToUpper(), Make = v.Make.ToUpper(), trim = v.trim.ToUpper() })
+                        .Distinct()
+                        .ToList()
+                        .ForEach(tr => context.Trims.Add(new Trim
+                        {
+                            ModelId = GetTrimForignKey(context,tr.Key.Model,tr.Key.Make),
+                            Name = tr.Key.trim
+                        }));
+                    context.SaveChanges();
+
+
+                    vehicles.Select(v => v.Color.ToUpper())
+                            .Distinct()
+                            .ToList()
+                            .ForEach(m => context.Colors.Add(new BodyColor
+                            {
+                                Name = m.ToUpper()
+                            }));
+                    context.SaveChanges();
+
+
+                    foreach(Vehicle v in vehicles)
                     {
-                        context.Makes.Add(new Make { Name = v.Make });
+                        v.ColorId = context.Colors.FirstOrDefault(c => c.Name == v.Color).Id;
+                        v.TrimId = GetTrimId(context, v.Make.ToUpper(), v.Model.ToUpper(), v.trim.ToUpper());
+
+                        context.Vehicles.Add(v);
                     }
 
-                    if (!context.Colors.Any(c => c.Name == v.Color))
+
+                    context.Issues.Add(new Notification
                     {
-                        context.Colors.Add(new BodyColor { Name = v.Color });
-                    }
+                        Name = "Link a new Data Source",
+                        Description = "Click here to download a client to link this website and your DMS.",
+                        Type = Notification.NotificationType.Installer,
+                        Url = "/Admin/Download"
+                    });
+                    context.Issues.Add(new Notification
+                    {
+                        Name = "Dealership Information - John Doe Auto",
+                        Description = "Click here to change Dealership name, splash photo and other settings.",
+                        Type = Notification.NotificationType.DealershipInfo,
+                        Url = "/Admin/Download"
+                    });
+
                     context.SaveChanges();
                 }
+                catch (Exception ex) { Console.WriteLine(ex); }
 
                 
+            }
 
-                foreach (Vehicle v in vehicles)
+            if (!context.Users.Any())
+            {
+
+                string[] roles = new string[] { "Admin" };
+
+                foreach (string role in roles)
                 {
-                    long _id = context.Makes.FirstOrDefault(m => m.Name == v.Make).Id;
-                    if (!context.Models.Any(mo => mo.MakeId == _id && mo.Name == v.Model))
+                    var roleStore = new RoleStore<IdentityRole>(context);
+
+                    if (!context.Roles.Any(r => r.Name == role))
                     {
-                        context.Models.Add(new Model { Name = v.Model, MakeId = _id });
+                        roleStore.CreateAsync(new IdentityRole(role)).Wait();
                     }
-                    context.SaveChanges();
                 }
+
+                var user = new IdentityUser
+                {
+                    UserName = "admin",
+                    NormalizedUserName = "ADMIN",
+                    Email = "jjauer95@gmail.com",
+                    NormalizedEmail = "JJAUER95@EXAMPLE.COM",
+                    PhoneNumber = "9899759606",
+                    EmailConfirmed = true,
+                    PhoneNumberConfirmed = true,
+                    SecurityStamp = Guid.NewGuid().ToString("D")
+                };
+
+
+                if (!context.Users.Any(u => u.UserName == user.UserName))
+                {
+                    var password = new PasswordHasher<IdentityUser>();
+                    var hashed = password.HashPassword(user, "1q2w3e");
+                    user.PasswordHash = hashed;
+
+                    var userStore = new UserStore<IdentityUser>(context);
+                    userStore.CreateAsync(user).Wait();
+
+                }
+                context.Accounts.Add(new Account
+                {
+                    CryptoPass = Crypto.Encrypt("1q2w3e"),
+                    DealerId = context.Dealers.First().Id,
+                    IdentityId = context.Users.First().Id
+                });
+                context.SaveChanges();
+
+                UserManager<IdentityUser> _userManager = serviceProvider.GetService<UserManager<IdentityUser>>();
+                IdentityUser _user = _userManager.FindByEmailAsync(user.Email).Result;
+                _ = _userManager.AddToRolesAsync(_user, roles);
+
             }
 
             return context.SaveChanges();
@@ -809,7 +869,50 @@ namespace Dealership.Data
 
 
 
+        private static long GetTrimForignKey(DealershipContext context, string model, string make)
+        {
 
+            foreach(Make ma in context.Makes)
+            {
+                if (ma.Name == make) { 
+                    foreach(Model mo in context.Models)
+                    {
+                        if (mo.Name == model && mo.MakeId == ma.Id) {
+                            return mo.Id;
+                        }
+                    }
+                }
+
+            }
+            throw new Exception("Could not find Make or Model for trim");
+        }
+
+        
+        private static long GetTrimId(DealershipContext context, string make, string model, string trim)
+        {
+
+            foreach (Make ma in context.Makes)
+            {
+                if (ma.Name == make)
+                {
+                    foreach (Model mo in context.Models)
+                    {
+                        if (mo.Name == model && mo.MakeId == ma.Id)
+                        {
+                            foreach(Trim t in context.Trims)
+                            {
+                                if(t.Name == trim && t.ModelId == mo.Id)
+                                {
+                                    return t.Id;
+                                }
+                            }
+                        }
+                    }
+                }
+
+            }
+            throw new Exception("Could not find Make, Model, or Trim for Vehicle");
+        }
 
     }
 

@@ -23,6 +23,11 @@ namespace Dealership.Controllers
             return View();
         }
 
+        public IActionResult Download()
+        {
+            return View();
+        }
+
 
         [HttpPost]
         public async Task<IActionResult> UploadMultiple(List<IFormFile> files)

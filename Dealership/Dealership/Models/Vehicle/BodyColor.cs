@@ -13,6 +13,7 @@ namespace Dealership.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Int64 Id { get; set; }
         public string Name { get; set; }
+        public List<Vehicle> Vehicles { get; set; }
 
     }
 }

@@ -17,12 +17,14 @@ namespace Dealership.Data
         }
 
         public DbSet<Dealer> Dealers { get; set; }
+        public DbSet<Account> Accounts { get; set; }
         public DbSet<Vehicle> Vehicles { get; set; }
         public DbSet<Model> Vins { get; set; }
         public DbSet<Make> Makes { get; set; }
         public DbSet<Model> Models { get; set; }
-        public DbSet<Model> Trims { get; set; }
+        public DbSet<Trim> Trims { get; set; }
         public DbSet<BodyColor> Colors { get; set; }
+        public DbSet<Notification> Issues { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

@@ -1,0 +1,26 @@
+﻿@model NotificationCenter
+
+    <style>
+        .alert .desc {
+            display: none;
+        }
+        .alert:hover .name {
+            display: none;
+        }
+        .alert:hover .desc{
+            display: block;
+        }
+    </style>
+    <div>
+        @foreach (Notification i in Model.Notifications)
+        {
+            <a href="@i.Url">
+                <div class="alert alert-@(i.Color)" role="alert">
+                    <div class="name">@i.Name</div>
+                    <div class="desc">@i.Description</div>
+                </div>
+            </a>
+
+        }
+    </div>
+    

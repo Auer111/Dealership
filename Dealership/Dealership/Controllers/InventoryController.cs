@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Dealership.Data;
 using Dealership.Models;
 using Microsoft.AspNetCore.Mvc;
+using Auer.Security;
 
 namespace Dealership.Controllers
 {

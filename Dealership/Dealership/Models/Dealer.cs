@@ -13,7 +13,10 @@ namespace Dealership.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
         public string Name { get; set; }
+        public string SplashImage { get; set; }
+
 
         public List<Vehicle> Vehicles { get; set; }
+        public List<Account> Accounts { get; set; }
     }
 }
