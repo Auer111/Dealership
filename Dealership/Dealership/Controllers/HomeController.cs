@@ -7,15 +7,18 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Dealership.Models;
 using Microsoft.AspNetCore.Http;
+using Dealership.Data;
 
 namespace Dealership.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly DealershipContext _context;
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(DealershipContext context, ILogger<HomeController> logger)
         {
+            _context = context;
             _logger = logger;
         }
 
@@ -43,10 +46,6 @@ namespace Dealership.Controllers
             return View("About");
         }
 
-        [HttpPost("UploadCSV")]
-        public IActionResult UploadCSV(IFormFile file)
-        {
-            return new ContentResult { Content = "Found Endpoint", StatusCode = 200 };
-        }
+        
     }
 }

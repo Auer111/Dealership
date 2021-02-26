@@ -36,9 +36,9 @@ namespace Dealership
             services.Configure<RazorViewEngineOptions>(options =>
                 options.ViewLocationFormats.Add("/Views/Shared/Components/{0}" + RazorViewEngine.ViewExtension));
 
-            services.AddMvc();
+            services.Configure<AppSettings>(options => Configuration.GetSection("AppSettings").Bind(options));
 
-            
+            services.AddMvc();
 
             services.AddDbContext<DealershipContext>(options =>
                    options.UseSqlServer(Configuration.GetConnectionString("DealershipContextConnection")));

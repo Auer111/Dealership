@@ -15,6 +15,7 @@ namespace Dealership.Models
         public Int64 Id { get; set; }
         public string CryptoPass { get; set; }
 
+
         [ForeignKey("Dealer")]
         public long DealerId { get; set; }
         public Dealer Dealer { get; set; }
