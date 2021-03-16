@@ -16,11 +16,10 @@ namespace DealershipClient
 {
     public partial class MainForm : Form
     {
-        LoginForm LF;
 
-        public MainForm(LoginForm lf)
+
+        public MainForm()
         {
-            LF = lf ;
             InitializeComponent();
             Show();
         }
@@ -43,7 +42,7 @@ namespace DealershipClient
                     filePath = openFileDialog.FileName;
                     FilePathInput.Text = filePath;
 
-                    LF.config.SetAppSetting("CSV", filePath);
+                    Client.config.SetAppSetting("CSV", filePath);
 
                     //Read the contents of the file into a stream
                     var fileStream = openFileDialog.OpenFile();
@@ -58,11 +57,11 @@ namespace DealershipClient
         
         private void button2_Click(object sender, EventArgs e)
         {
-            string endpoint = LF.config.GetAppSetting("Endpoint") ?? ConfigurationManager.ConnectionStrings["Endpoint"].ConnectionString;
+            string endpoint = Client.config.GetAppSetting("Endpoint") ?? ConfigurationManager.ConnectionStrings["Endpoint"].ConnectionString;
             string result = Client.Upload(
-            Client.GetFile(LF.config.GetAppSetting("CSV")),
-            LF.config.GetAppSetting("Username"),
-            LF.config.GetAppSetting("Password"),
+            Client.GetFile(Client.config.GetAppSetting("CSV")),
+            Client.config.GetAppSetting("Username"),
+            Client.config.GetAppSetting("Password"),
             endpoint + "/Upload");
 
             Console.WriteLine(result);

@@ -30,9 +30,6 @@ namespace Dealership
         {
             services.AddControllersWithViews().AddSessionStateTempDataProvider();
 
-            services.AddDbContext<DealershipContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-
             services.Configure<RazorViewEngineOptions>(options =>
                 options.ViewLocationFormats.Add("/Views/Shared/Components/{0}" + RazorViewEngine.ViewExtension));
 
@@ -40,8 +37,9 @@ namespace Dealership
 
             services.AddMvc();
 
+
             services.AddDbContext<DealershipContext>(options =>
-                   options.UseSqlServer(Configuration.GetConnectionString("DealershipContextConnection")));
+                   options.UseMySQL(Configuration.GetConnectionString("DealershipContextConnection")));
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<DealershipContext>();

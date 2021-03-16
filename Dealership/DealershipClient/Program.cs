@@ -23,7 +23,10 @@ namespace DealershipClient
             //string AppName = "DealerspaceClient";
             if (args.Any())
             {
-                //ScheduleTask(AppName);
+                if (Client.RunTask(args) ?? false)
+                {
+                    Application.Run(Client.MainForm = new MainForm());
+                }
             }
             else
             {
@@ -34,11 +37,11 @@ namespace DealershipClient
                 //Thread.Sleep(8000); //Sleep to allow localhost to startup
                 if (!Client.IsLoggedIn())
                 {
-                    Application.Run(new LoginForm());
+                    Application.Run(Client.LoginForm = new LoginForm());
                 }
                 else
                 {
-                    Application.Run(new MainForm(new LoginForm()));
+                    Application.Run(Client.MainForm = new MainForm());
                 }
             }  
         }

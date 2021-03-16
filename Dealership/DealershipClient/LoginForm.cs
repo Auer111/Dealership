@@ -15,17 +15,14 @@ namespace DealershipClient
 {
     public partial class LoginForm : Form
     {
-        public Configuration config;
         public LoginForm()
         {
-            config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-
             InitializeComponent();
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-            config.SetAppSetting("Username", this.Username.Text);
+            Client.config.SetAppSetting("Username", this.Username.Text);
         }
 
         private void panel1_Paint(object sender, PaintEventArgs e)
@@ -36,8 +33,8 @@ namespace DealershipClient
         private void MainForm_Load(object sender, EventArgs e)
         {
             this.ActiveControl = Title;
-            this.Username.Text = config.GetAppSetting("Username");
-            this.Endpoint.Text = config.GetAppSetting("Endpoint") ?? ConfigurationManager.ConnectionStrings["Endpoint"].ConnectionString;
+            this.Username.Text = Client.config.GetAppSetting("Username");
+            this.Endpoint.Text = Client.config.GetAppSetting("Endpoint") ?? ConfigurationManager.ConnectionStrings["Endpoint"].ConnectionString;
         }
 
         private void textBox1_TextChanged_1(object sender, EventArgs e)
@@ -47,8 +44,8 @@ namespace DealershipClient
 
         private void TestButton_Click(object sender, EventArgs e)
         {
-            config.SetAppSetting("Endpoint", this.Endpoint.Text);
-            config.SetAppSetting("Password", Crypto.Encrypt(this.Password.Text));
+            Client.config.SetAppSetting("Endpoint", this.Endpoint.Text);
+            Client.config.SetAppSetting("Password", Crypto.Encrypt(this.Password.Text));
 
             string dealer = Client.Login(
                 this.Username.Text, 
@@ -56,18 +53,18 @@ namespace DealershipClient
                 this.Endpoint.Text + "/Login");
             if(dealer != null)
             {
-                SwitchFourms(new MainForm(this));
+                SwitchFourms(new MainForm());
             }
-            
-            config.SetAppSetting("Dealer", dealer);
+
+            Client.config.SetAppSetting("Dealer", dealer);
 
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            config.SetAppSetting("Password", Crypto.Encrypt(this.Password.Text));
+            Client.config.SetAppSetting("Password", Crypto.Encrypt(this.Password.Text));
 
-            config.Save();
+            Client.config.Save();
         }
 
         private void Title_Click(object sender, EventArgs e)

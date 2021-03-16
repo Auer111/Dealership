@@ -16,6 +16,11 @@ namespace DealershipClient
     class Client
     {
 
+        public static Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+        public static LoginForm LoginForm;
+        public static MainForm MainForm;
+
+
         public static bool IsLoggedIn()
         {
             
@@ -60,13 +65,38 @@ namespace DealershipClient
             td.RegistrationInfo.Description = "Run Task";
             td.Principal.RunLevel = TaskRunLevel.Highest;
 
-            RegistrationTrigger rt = new RegistrationTrigger();
-            rt.Repetition.Interval = TimeSpan.FromMinutes(1);
 
-            td.Triggers.Add(rt);
+            BootTrigger bt = new BootTrigger();
+            bt.Repetition.Interval = TimeSpan.FromMinutes(1);
+            bt.Repetition.Duration = TimeSpan.FromHours(12);
+
+            //RegistrationTrigger rt = new RegistrationTrigger();
+            //rt.Repetition.Interval = TimeSpan.FromMinutes(1);
+
+            td.Triggers.Add(bt);
             td.Actions.Add(ExecutablePath(), "myArgs");
 
             TaskService.Instance.RootFolder.RegisterTaskDefinition(TaskName, td);
+        }
+        public static bool? RunTask(string[] args)
+        {
+            string file = GetFile(config.GetAppSetting("CSV"));
+
+            if (string.IsNullOrWhiteSpace(file)) { return null; }
+
+            //File is updated
+            if(File.GetLastWriteTime(file) > DateTime.Parse(config.GetAppSetting("csvWriteDate")))
+            {
+                string endpoint = Client.config.GetAppSetting("Endpoint") ?? ConfigurationManager.ConnectionStrings["Endpoint"].ConnectionString;
+                string result = Client.Upload(
+                    Client.GetFile(Client.config.GetAppSetting("CSV")),
+                    Client.config.GetAppSetting("Username"),
+                    Client.config.GetAppSetting("Password"),
+                    endpoint + "/Upload");
+                return true;
+            }
+
+            return false;
         }
 
         public static string ExecutablePath()
@@ -88,15 +118,24 @@ namespace DealershipClient
         public static string GetFile(string fileName = null)
         {
             if (fileName != null && File.Exists(fileName)) {
-                return fileName;
+                return SetFileInfo(fileName);
             }
 
             string[] files = Directory.GetFiles(Path.GetDirectoryName(ExecutablePath()), "*.csv");
             if (files.Any())
             {
-                return files.Select(f => new DirectoryInfo(f)).OrderByDescending(di => di.LastWriteTime).First().FullName;
+                string file = files.Select(f => new DirectoryInfo(f)).OrderByDescending(di => di.LastWriteTime).First().FullName;
+                return SetFileInfo(fileName);
             }
             return null;
+        }
+
+        private static string SetFileInfo(string file)
+        {
+            File.SetLastWriteTime(file, DateTime.Now);
+            config.SetAppSetting("CSV", file);
+            config.SetAppSetting("csvWriteDate", DateTime.Now.ToString());
+            return file;
         }
 
         public static string Login(string username, string password, string url = null)
